@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aim Trainer</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; background-color: #111; color: white; overflow: hidden; }
+        #game-container { position: relative; width: 100vw; height: 100vh; }
+        .target { position: absolute; width: 50px; height: 50px; background-color: red; border-radius: 50%; cursor: pointer; }
+        #scoreboard { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-size: 24px; }
+        #timer { position: absolute; top: 50px; left: 50%; transform: translateX(-50%); font-size: 20px; }
+        #lives { position: absolute; top: 90px; left: 50%; transform: translateX(-50%); font-size: 20px; }
+        #start-button { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div id="game-container" onclick="loseLife(event)">
+        <div id="scoreboard">Pontuação: 0</div>
+        <div id="timer">Tempo: 30s</div>
+        <div id="lives">Vidas: 5</div>
+        <button id="start-button" onclick="startGame(event)">Iniciar</button>
+    </div>
+    <script>
+        let score = 0;
+        let timeLeft = 30;
+        let lives = 5;
+        let gameInterval;
+        let gameActive = false;function startGame(event) {
+        event.stopPropagation(); // Evita perda de vida ao clicar no botão
+        document.getElementById('start-button').style.display = 'none';
+        score = 0;
+        timeLeft = 30;
+        lives = 5;
+        gameActive = true;
+        updateScoreboard();
+        updateTimer();
+        updateLives();
+        for (let i = 0; i < 3; i++) {
+            spawnTarget();
+        }
+        gameInterval = setInterval(() => {
+            timeLeft--;
+            updateTimer();
+            if (timeLeft <= 0 || lives <= 0) endGame();
+        }, 1000);
+    }
+
+    function updateScoreboard() {
+        document.getElementById('scoreboard').innerText = 'Pontuação: ' + score;
+    }
+
+    function updateTimer() {
+        document.getElementById('timer').innerText = 'Tempo: ' + timeLeft + 's';
+    }
+    
+    function updateLives() {
+        document.getElementById('lives').innerText = 'Vidas: ' + lives;
+    }
+
+    function spawnTarget() {
+        const target = document.createElement('div');
+        target.classList.add('target');
+        target.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+        target.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+        target.onclick = (event) => {
+            event.stopPropagation(); // Impede que o clique registre um erro
+            score++;
+            updateScoreboard();
+            target.remove();
+            spawnTarget();
+        };
+        document.getElementById('game-container').appendChild(target);
+    }
+
+    function loseLife(event) {
+        if (gameActive && !event.target.classList.contains('target')) {
+            lives--;
+            updateLives();
+            if (lives <= 0) endGame();
+        }
+    }
+
+    function endGame() {
+        clearInterval(gameInterval);
+        gameActive = false;
+        alert('Fim do jogo! Sua pontuação: ' + score);
+        document.getElementById('start-button').style.display = 'block';
+        document.querySelectorAll('.target').forEach(target => target.remove());
+    }
+</script>
+
+</body>
+</html>

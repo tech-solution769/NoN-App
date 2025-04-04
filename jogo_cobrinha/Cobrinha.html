@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Cobrinha</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        canvas { background: #000; display: block; margin: auto; }
+        .controls { display: flex; justify-content: center; margin-top: 10px; }
+        button { padding: 10px; font-size: 18px; margin: 5px; }
+        .menu, .countdown-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        .game-container { display: none; }
+        .countdown-container { font-size: 50px; display: none; }
+        #score { font-size: 20px; color: white; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div id="menu" class="menu">
+        <h1>Jogo da Cobrinha</h1>
+        <button onclick="startCountdown()">Iniciar Jogo</button>
+    </div>
+    <div id="countdownContainer" class="countdown-container">
+        <p id="countdown">3</p>
+    </div>
+    <div id="gameContainer" class="game-container">
+        <h1>Jogo da Cobrinha</h1>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div class="controls">
+            <button onclick="changeDirection('up')">⬆️</button>
+        </div>
+        <div class="controls">
+            <button onclick="changeDirection('left')">⬅️</button>
+            <button onclick="changeDirection('down')">⬇️</button>
+            <button onclick="changeDirection('right')">➡️</button>
+        </div>
+        <p id="score">Pontuação: 0</p>
+    </div>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const menu = document.getElementById("menu");
+        const gameContainer = document.getElementById("gameContainer");
+        const countdownContainer = document.getElementById("countdownContainer");
+        const countdownText = document.getElementById("countdown");
+        const scoreText = document.getElementById("score");const box = 20;
+    let snake;
+    let food;
+    let direction;
+    let game;
+    let score;
+
+    function startCountdown() {
+        menu.style.display = "none";
+        countdownContainer.style.display = "flex";
+        let counter = 3;
+        countdownText.innerText = counter;
+        
+        let countdown = setInterval(() => {
+            counter--;
+            countdownText.innerText = counter;
+            if (counter === 0) {
+                clearInterval(countdown);
+                countdownContainer.style.display = "none";
+                startGame();
+            }
+        }, 1000);
+    }
+
+    function startGame() {
+        gameContainer.style.display = "block";
+        
+        snake = [{ x: 10 * box, y: 10 * box }];
+        food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 20) * box };
+        direction = "right";
+        score = 0;
+        scoreText.innerText = "Pontuação: " + score;
+        game = setInterval(gameLoop, 150);
+    }
+
+    function draw() {
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = "red";
+        ctx.fillRect(food.x, food.y, box, box);
+        
+        ctx.fillStyle = "lime";
+        snake.forEach(segment => ctx.fillRect(segment.x, segment.y, box, box));
+    }
+    
+    function update() {
+        let head = { x: snake[0].x, y: snake[0].y };
+        if (direction === "right") head.x += box;
+        if (direction === "left") head.x -= box;
+        if (direction === "up") head.y -= box;
+        if (direction === "down") head.y += box;
+        
+        if (head.x === food.x && head.y === food.y) {
+            food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 20) * box };
+            score++;
+            scoreText.innerText = "Pontuação: " + score;
+        } else {
+            snake.pop();
+        }
+        
+        if (head.x < 0 || head.y < 0 || head.x >= canvas.width || head.y >= canvas.height || snake.some(seg => seg.x === head.x && seg.y === head.y)) {
+            clearInterval(game);
+            alert("Game Over! Sua pontuação foi: " + score);
+            resetGame();
+            return;
+        }
+        
+        snake.unshift(head);
+    }
+
+    function resetGame() {
+        gameContainer.style.display = "none";
+        menu.style.display = "flex";
+    }
+
+    function changeDirection(newDirection) {
+        if (newDirection === "up" && direction !== "down") direction = "up";
+        if (newDirection === "down" && direction !== "up") direction = "down";
+        if (newDirection === "left" && direction !== "right") direction = "left";
+        if (newDirection === "right" && direction !== "left") direction = "right";
+    }
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "ArrowUp") changeDirection("up");
+        if (event.key === "ArrowDown") changeDirection("down");
+        if (event.key === "ArrowLeft") changeDirection("left");
+        if (event.key === "ArrowRight") changeDirection("right");
+    });
+
+    function gameLoop() {
+        update();
+        draw();
+    }
+</script>
+
+</body>
+</html>

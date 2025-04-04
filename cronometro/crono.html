@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relógio, Cronômetro e Temporizador</title>
+    <link rel="stylesheet" href="cronome.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Relógio, Cronômetro e Temporizador</h1>
+
+        <!-- Relógio -->
+        <div id="relogio">
+            <h2>Relógio</h2>
+            <div id="clock"></div>
+        </div>
+
+        <!-- Cronômetro -->
+        <div id="cronometro">
+            <h2>Cronômetro</h2>
+            <button id="startStop">Iniciar</button>
+            <button id="reset" disabled>Resetar</button>
+            <div id="timeDisplay">00:00</div>
+        </div>
+
+        <!-- Temporizador -->
+        <div id="temporizador">
+            <h2>Temporizador</h2>
+            <input type="number" id="inputTempo" placeholder="Tempo em segundos">
+            <button id="startTimer">Iniciar Temporizador</button>
+            <div id="timerDisplay">00:00</div>
+        </div>
+    </div>
+
+    <audio id="alarm" src="sons/alarme.mp3"></audio>
+
+    <script src="cronometro.js"></script>
+</body>
+</html>

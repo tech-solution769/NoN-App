@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" defer src="./src/js/main.js"></script>
+    <link rel="stylesheet" href="./src/style/style.css">
+    <title>Checkers AI</title>
+</head>
+
+<body>
+  <section id="menu">
+    <button id="iniciar" onclick="jogoplay()">Iniciar Jogo</button>
+  </section>
+    <header>
+        <h1>Checkers</h1>
+        <p>vs Player2</p> <!-- Placeholder for an option later -->
+    </header>
+    <main>
+        <!-- The Playing Board -->
+        <div id="board" class="board"></div>
+
+        <!-- The Score Board -->
+        <div id="scores">
+            <h2>Scores</h2>
+            <p>You: <span id="humanScore">0</span> | Player2: <span id="computerScore">0</span></p>
+        </div>
+
+        <!-- Place for playing errors -->
+        <div class="errors">
+            <p id="error"></p>
+        </div>
+    </main>
+    
+    <script>
+      function jogoplay() {
+    // Pega a classe board e altera o display para block
+    document.querySelector('.board').style.display = 'block';
+    
+    // Pega o header e altera o display para block
+    document.querySelector('header').style.display = 'block';
+    
+    document.querySelector('#scores').style.display = 'block';
+    
+    // Pega o botão com o id #iniciar e o remove da tela
+    document.querySelector('#iniciar').style.display = 'none';
+}
+    </script>
+</body>
+</html>

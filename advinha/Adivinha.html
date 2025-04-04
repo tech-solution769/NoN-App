@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Adivinhação</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; background-color: #111; color: white; }
+        #game-container { margin-top: 50px; }
+        input { padding: 5px; font-size: 16px; }
+        button { padding: 10px; font-size: 16px; cursor: pointer; }
+        #message { margin-top: 20px; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Adivinhe o número entre 1 e 15</h1>
+        <input type="number" id="guess" min="1" max="15">
+        <button onclick="checkGuess()">Enviar</button>
+        <p id="message"></p>
+        <button onclick="resetGame()">Reiniciar</button>
+    </div><script>
+    let secretNumber = Math.floor(Math.random() * 15) + 1;
+    let attempts = 0;
+    
+    function checkGuess() {
+        let userGuess = parseInt(document.getElementById('guess').value);
+        attempts++;
+        
+        if (userGuess === secretNumber) {
+            document.getElementById('message').innerText = `Parabéns! Você acertou em ${attempts} tentativas.`;
+        } else if (userGuess > secretNumber) {
+            document.getElementById('message').innerText = 'Muito alto! Tente um número menor.';
+        } else {
+            document.getElementById('message').innerText = 'Muito baixo! Tente um número maior.';
+        }
+    }
+    
+    function resetGame() {
+        secretNumber = Math.floor(Math.random() * 15) + 1;
+        attempts = 0;
+        document.getElementById('message').innerText = '';
+        document.getElementById('guess').value = '';
+    }
+</script>
+
+</body>
+</html>
