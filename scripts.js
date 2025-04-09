@@ -1,4 +1,4 @@
- document.getElementById("btngames").addEventListener("click", function() {
+document.getElementById("btngames").addEventListener("click", function() {
         document.getElementById("jogos").scrollIntoView({ behavior: "smooth" });
     });
     
